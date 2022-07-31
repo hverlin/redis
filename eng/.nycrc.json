@@ -2,7 +2,7 @@
   "extension": [".ts"],
   "check-coverage": true,
   "include": ["src/**"],
-  "reporter": ["text", "text-summary", "cobertura"],
+  "reporter": ["text", "text-summary", "lcov"],
   "statements": 70,
   "branches": 70,
   "functions": 75,
