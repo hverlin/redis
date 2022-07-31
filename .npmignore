@@ -7,8 +7,10 @@ test/
 .husky
 .prettierignore
 .eslintignore
+.eslintrc.json
 .gitignore
 tsconfig.json
+vite.config.ts
 
 # IDE
 .idea/

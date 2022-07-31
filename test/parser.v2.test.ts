@@ -1,5 +1,5 @@
 import { strictEqual } from 'assert';
-import { describe, it } from 'mocha';
+import { describe, it } from 'vitest';
 import Parser from '../src/parser/parser.v2';
 
 const parser = new Parser();
