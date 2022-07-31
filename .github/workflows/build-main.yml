@@ -32,4 +32,9 @@ jobs:
         run: npm run lint
 
       - name: Run Tests
-        run: npm test
+        run: npm coverage
+
+      - uses: tintef/nyc-reporter-action
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPORTER: 'text'
