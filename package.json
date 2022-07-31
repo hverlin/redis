@@ -8,6 +8,10 @@
     "type": "git",
     "url": "https://github.com/hverlin/redis"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "license": "MIT",
   "scripts": {
     "test": "vitest test",
