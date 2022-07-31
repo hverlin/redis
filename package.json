@@ -1,6 +1,6 @@
 {
   "name": "@hverlin/redis",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/index.js",
   "description": "Redis client for node. RESP3 and redis 6/7 support",
   "homepage": "https://github.com/hverlin/redis",
