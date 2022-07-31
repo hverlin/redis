@@ -1,10 +1,14 @@
 .github/
 .nyc/
-.vscode/
 coverage/
 eng/
 src/
 test/
+.husky
 
 .gitignore
 tsconfig.json
+
+# IDE
+.idea/
+.vscode

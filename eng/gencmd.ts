@@ -1,6 +1,9 @@
 import { readFileSync } from 'fs';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
+
+// eslint-disable-next-line
+// @ts-ignore
 import { ClientV3 } from '../';
 
 const jsonPath = resolve(__dirname, '..', 'src', 'command', 'commands.json');
@@ -17,25 +20,26 @@ const redis = new ClientV3();
 const notInCommands = ['zscan', 'quit'];
 
 async function dodo() {
-    const redisCommands = await redis.COMMAND<[string][]>();
-    const commands = redisCommands.filter(rc => rc instanceof Array).map(rc => rc[0]);
-    commands.push(...notInCommands);
-    commands.sort();
-    writeFileSync(jsonPath, JSON.stringify(commands, undefined, '\u0020\u0020\u0020\u0020'));
+  const redisCommands = await redis.COMMAND<[string][]>();
+  // eslint-disable-next-line
+  const commands = redisCommands.filter((rc: any) => rc instanceof Array).map((rc: any[]) => rc[0]);
+  commands.push(...notInCommands);
+  commands.sort();
+  writeFileSync(jsonPath, JSON.stringify(commands, undefined, '\u0020\u0020\u0020\u0020'));
 
-    commands.forEach(cmdText => {
-        checkDTS(cmdText);
-    });
-    process.exit(0);
+  commands.forEach((cmdText: string) => {
+    checkDTS(cmdText);
+  });
+  process.exit(0);
 }
 
 function checkDTS(cmdText: string) {
-    const reg = new RegExp(`${cmdText.toUpperCase()}(<T>)?(.*)`);
-    if (!reg.test(dtsBase)) {
-        if (!reg.test(dtsV2) || !reg.test(dtsV3)) {
-            console.log(`Command '${cmdText}' is not defined in dts.`);
-        }
+  const reg = new RegExp(`${cmdText.toUpperCase()}(<T>)?(.*)`);
+  if (!reg.test(dtsBase)) {
+    if (!reg.test(dtsV2) || !reg.test(dtsV3)) {
+      console.log(`Command '${cmdText}' is not defined in dts.`);
     }
+  }
 }
 
 dodo();

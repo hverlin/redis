@@ -4,15 +4,14 @@ about: Create a report to help us improve
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 ## Environment
 
-+ Node version:
-+ Redis Server version:
-+ Redis protocol version:
-+ Camaro Redis version:
+- Node version:
+- Redis Server version:
+- Redis protocol version:
+- Library version:
 
 ## Describe the bug
 
@@ -22,7 +21,7 @@ A clear and concise description of what the bug is.
 
 Code to reproduce the behavior:
 
-``` js
+```js
 
 ```
 

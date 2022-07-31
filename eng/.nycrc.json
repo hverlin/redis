@@ -1,19 +1,11 @@
 {
-    "extension": [
-        ".ts"
-    ],
-    "check-coverage": true,
-    "include": [
-        "src/**"
-    ],
-    "reporter": [
-        "text",
-        "text-summary",
-        "cobertura"
-    ],
-    "statements": 70,
-    "branches": 70,
-    "functions": 75,
-    "lines": 70,
-    "temp-dir": "./.nyc"
+  "extension": [".ts"],
+  "check-coverage": true,
+  "include": ["src/**"],
+  "reporter": ["text", "text-summary", "cobertura"],
+  "statements": 70,
+  "branches": 70,
+  "functions": 75,
+  "lines": 70,
+  "temp-dir": "./.nyc"
 }

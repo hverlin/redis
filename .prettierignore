@@ -1,7 +1,6 @@
 # Test result
 .nyc/
 coverage/
-.idea/
 
 # Modules
 node_modules/
@@ -13,3 +12,7 @@ types/
 # husky folder
 eng/_
 eng/husky/.gitignore
+
+# IDE
+.idea/
+.vscode
