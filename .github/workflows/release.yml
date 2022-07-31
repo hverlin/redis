@@ -1,12 +1,9 @@
-name: Build main
+name: Build Release
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 jobs:
   tests:
