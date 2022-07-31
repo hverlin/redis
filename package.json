@@ -8,9 +8,11 @@
     "type": "git",
     "url": "https://github.com/hverlin/redis"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "license": "MIT",
   "scripts": {
-    "prepare": "husky install ./eng/husky",
     "test": "ts-node test/index.ts",
     "coverage": "nyc --nycrc-path=./eng/.nycrc.json npm test",
     "lint": "eslint '**/*.{ts,js,json}'",

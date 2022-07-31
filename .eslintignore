@@ -1,0 +1,18 @@
+# Test result
+.nyc/
+coverage/
+
+# Modules
+node_modules/
+
+# Compile output
+lib/
+types/
+
+# husky folder
+eng/_
+eng/husky/.gitignore
+
+# IDE
+.idea/
+.vscode
