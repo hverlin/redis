@@ -20,6 +20,7 @@ Redis client which supports [resp3](https://github.com/antirez/RESP3/blob/master
 ```bash
 npm i -save @hverlin/redis
 ```
+
 More details: See https://github.com/hverlin/redis/packages/1570132
 
 ### Usage
