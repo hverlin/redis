@@ -1,4 +1,4 @@
-# Camaro Redis
+# Redis client
 
 > Forked from https://github.com/camarojs/redis
 
@@ -10,20 +10,23 @@ Redis client which supports [resp3](https://github.com/antirez/RESP3/blob/master
 - All command return promises
 - Support for ES6 types, such as Map and Set
 - TLS support
+- [Client-side caching](#client-side-caching)
 
 ## Quick Start
 
 ### Install
 
 ```bash
-npm install @camaro/redis
+npm install @hverlin/redis@0.0.1
 ```
+
+More details: See https://github.com/hverlin/redis/packages/1570132
 
 ### Usage
 
 ```js
 // If you want to use resp2 ,change `ClientV3` to `ClientV2`.
-const { ClientV3: Client } = require('@camaro/redis');
+const { ClientV3: Client } = require('@hverlin/redis');
 const client = new Client();
 
 await client.SET('foo', 'bar');
@@ -110,7 +113,7 @@ Listen for invalidation messages to know when to remove entries from your local 
 > Note that if you use TTL, you would also need to manage them for the local cache as Redis does not send invalidation message when the TTL expires
 
 ```js
-const { ClientV3: Client } = require('@camaro/redis');
+const { ClientV3: Client } = require('@hverlin/redis');
 const client = new Client();
 
 const localCache = new Map();
