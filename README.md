@@ -11,6 +11,7 @@ Redis client which supports [resp3](https://github.com/antirez/RESP3/blob/master
 - Support for ES6 types, such as Map and Set
 - TLS support
 - [Client-side caching](#client-side-caching)
+- No dependencies
 
 ## Quick Start
 
@@ -19,6 +20,7 @@ Redis client which supports [resp3](https://github.com/antirez/RESP3/blob/master
 ```bash
 npm i -save @hverlin/redis
 ```
+
 More details: See https://github.com/hverlin/redis/packages/1570132
 
 ### Usage

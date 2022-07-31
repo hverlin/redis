@@ -1,5 +1,5 @@
 import { strictEqual } from 'assert';
-import { describe, it } from 'mocha';
+import { describe, it } from 'vitest';
 import { RedisError } from '../src/library/redisError';
 import { VerbatimString } from '../src/library/verbatimString';
 import Parser from '../src/parser/parser.v3';
@@ -229,7 +229,7 @@ describe('Parser.parseBigNumber', () => {
       });
     });
     parser.decodeReply(buffer);
-    const result = (await p) as BigInt;
+    const result = (await p) as bigint;
     strictEqual(result, BigInt('-3492890328409238509324850943850943825024385'));
   });
 });

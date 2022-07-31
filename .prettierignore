@@ -12,6 +12,7 @@ types/
 # husky folder
 eng/_
 eng/husky/.gitignore
+README.md
 
 # IDE
 .idea/
