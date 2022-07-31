@@ -8,9 +8,6 @@
     "type": "git",
     "url": "https://github.com/hverlin/redis"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "license": "MIT",
   "scripts": {
     "test": "vitest test",
