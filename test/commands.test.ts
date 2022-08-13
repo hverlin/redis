@@ -1,11 +1,11 @@
 import { ClientV3 } from '../src/index';
-import { assert, describe, it, afterEach } from 'vitest';
+import { assert, describe, it, afterEach, beforeEach } from 'vitest';
 import { randomUUID } from 'crypto';
 
 const globalTestPrefix = `redis-client-test`;
 const testPrefix = `${globalTestPrefix}:${randomUUID()}`;
 
-const genKey = (key: string): string => `${testPrefix}:${randomUUID()}:${key}`;
+const genKey = (key?: string): string => `${testPrefix}:${randomUUID()}:${key ?? 'key'}`;
 
 async function cleanupRedis(prefix: string) {
   const client = new ClientV3();
@@ -20,17 +20,25 @@ async function cleanupRedis(prefix: string) {
   if (keysToDelete.length > 0) {
     await client.DEL(...keysToDelete);
   }
+  await client.QUIT();
 }
 
 describe('commands test', function () {
+  let client: ClientV3;
   afterEach(async () => {
+    if (client) {
+      await client.QUIT();
+    }
     await cleanupRedis(testPrefix);
+  });
+
+  beforeEach(() => {
+    client = new ClientV3();
   });
 
   // https://redis.io/commands/get/
   // https://redis.io/commands/set/
   it('GET/SET commands', async () => {
-    const client = new ClientV3();
     const key = genKey('foo');
 
     assert.equal(await client.GET(key), null);
@@ -44,7 +52,6 @@ describe('commands test', function () {
   });
 
   it('EXISTS', async () => {
-    const client = new ClientV3();
     const key = genKey('fooExist');
     const key2 = genKey('fooExist2');
 
@@ -62,7 +69,6 @@ describe('commands test', function () {
     const key2 = genKey('keyToDelete2');
     const key3 = genKey('keyToDelete3');
 
-    const client = new ClientV3();
     await client.SET(key1, 'bar1');
     await client.SET(key2, 'bar2');
     await client.SET(key3, 'bar3');
@@ -79,8 +85,7 @@ describe('commands test', function () {
   // https://redis.io/commands/hget
   // https://redis.io/commands/hset
   // https://redis.io/commands/hexists
-  it('HGET/HSET/HEXSITS commands', async () => {
-    const client = new ClientV3();
+  it('HGET/HSET/HEXISTS commands', async () => {
     const key = genKey('myHash');
 
     const fieldKey = 'field';
@@ -94,11 +99,16 @@ describe('commands test', function () {
     assert.equal(await client.HEXISTS(key, fieldKey), 1);
   });
 
+  it('APPEND command', async () => {
+    const key = genKey();
+    assert.equal(await client.APPEND(key, 'Hello'), 5);
+    assert.equal(await client.APPEND(key, ' World'), 11);
+    assert.equal(await client.GET(key), 'Hello World');
+  });
+
   // https://redis.io/commands/multi
   // https://redis.io/commands/exec
   it('Should execute a multi command', async () => {
-    const client = new ClientV3();
-
     const key = genKey('foo2');
     await client.SET(key, 'bar', 'EX', '60');
 
