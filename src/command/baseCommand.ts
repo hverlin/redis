@@ -268,9 +268,9 @@ export interface IBaseCommand {
 
   HVALS(key: string, field: string): Promise<string[]>;
 
-  INCR(key: string, field: string): Promise<string[]>;
+  INCR(key: string): number;
 
-  INCRBY(key: string, field: string, increment: string): Promise<number>;
+  INCRBY(key: string, increment: number): Promise<number>;
 
   INCRBYFLOAT(key: string, field: string, increment: string): Promise<number>;
 

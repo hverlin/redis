@@ -1,5 +1,5 @@
 import { ClientV3 } from '../src/index';
-import { assert, describe, it, afterEach, beforeEach } from 'vitest';
+import { assert, describe, it, afterEach, beforeEach, expect } from 'vitest';
 import { randomUUID } from 'crypto';
 
 const globalTestPrefix = `redis-client-test`;
@@ -123,11 +123,26 @@ describe('commands test', function () {
     assert.equal(await client.GET(key), 'Hello World');
   });
 
+  it('INCR/DECR commands', async () => {
+    const key = genKey();
+    await client.SET(key, '10');
+    assert.equal(await client.INCR(key), 11);
+    assert.equal(await client.INCRBY(key, 5), 16);
+    assert.equal(await client.GET(key), '16');
+
+    assert.equal(await client.DECR(key), 15);
+    assert.equal(await client.DECRBY(key, 2), 13);
+
+    await client.SET(key, 'test');
+    expect(client.INCR(key)).rejects.toThrow('ERR value is not an integer or out of range');
+    expect(client.DECR(key)).rejects.toThrow('ERR value is not an integer or out of range');
+  });
+
   // https://redis.io/commands/multi
   // https://redis.io/commands/exec
   it('Should execute a multi command', async () => {
     const key = genKey('foo2');
-    await client.SET(key, 'bar', 'EX', '60');
+    assert.equal(await client.SET(key, 'bar', 'EX', '60'), 'OK');
 
     await client.MULTI();
     await client.TTL(key);
