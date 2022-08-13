@@ -36,6 +36,23 @@ describe('commands test', function () {
     client = new ClientV3();
   });
 
+  it('INFO command', async () => {
+    const infoRes = await client.INFO();
+    const info = infoRes.split('\r\n');
+    assert.equal(info[0], '# Server');
+    assert.include(info[1], 'redis_version');
+
+    const clientInfo = await client.INFO('clients');
+    const res = clientInfo.split('\r\n');
+    const connectedClientsLine = res[1];
+    assert.ok(+(connectedClientsLine?.split(':')[1] ?? 0) >= 1, clientInfo[0]);
+  });
+
+  it('PING command', async () => {
+    assert.equal(await client.PING(), 'PONG');
+    assert.equal(await client.PING('test'), 'test');
+  });
+
   // https://redis.io/commands/get/
   // https://redis.io/commands/set/
   it('GET/SET commands', async () => {
