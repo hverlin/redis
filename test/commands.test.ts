@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 const globalTestPrefix = `redis-client-test`;
 const testPrefix = `${globalTestPrefix}:${randomUUID()}`;
 
-const genKey = (key: string): string => `${testPrefix}:${key}`;
+const genKey = (key: string): string => `${testPrefix}:${randomUUID()}:${key}`;
 
 async function cleanupRedis(prefix: string) {
   const client = new ClientV3();
@@ -43,6 +43,20 @@ describe('commands test', function () {
     assert.isAtMost(ttl, 60);
   });
 
+  it('EXISTS', async () => {
+    const client = new ClientV3();
+    const key = genKey('fooExist');
+    const key2 = genKey('fooExist2');
+
+    assert.equal(await client.EXISTS(key), 0);
+    await client.SET(key, 'test');
+    assert.equal(await client.EXISTS(key), 1);
+
+    assert.equal(await client.EXISTS(key, key2), 1);
+    await client.SET(key2, 'test2');
+    assert.equal(await client.EXISTS(key, key2), 2);
+  });
+
   it('DEL command', async () => {
     const key1 = genKey('keyToDelete1');
     const key2 = genKey('keyToDelete2');
@@ -62,25 +76,30 @@ describe('commands test', function () {
     }
   });
 
-  // https://redis.io/commands/hget/
-  // https://redis.io/commands/hset/
-  it('HGET/HSET commands', async () => {
+  // https://redis.io/commands/hget
+  // https://redis.io/commands/hset
+  // https://redis.io/commands/hexists
+  it('HGET/HSET/HEXSITS commands', async () => {
     const client = new ClientV3();
     const key = genKey('myHash');
 
     const fieldKey = 'field';
     const value = 'hello';
     assert.equal(await client.HGET(key, fieldKey), null);
+    assert.equal(await client.HEXISTS(key, fieldKey), 0);
+
     await client.HSET(key, fieldKey, value);
+
     assert.equal(await client.HGET(key, fieldKey), value);
+    assert.equal(await client.HEXISTS(key, fieldKey), 1);
   });
 
-  // https://redis.io/commands/multi/
-  // https://redis.io/commands/exec/
+  // https://redis.io/commands/multi
+  // https://redis.io/commands/exec
   it('Should execute a multi command', async () => {
     const client = new ClientV3();
 
-    const key = 'foo2';
+    const key = genKey('foo2');
     await client.SET(key, 'bar', 'EX', '60');
 
     await client.MULTI();
