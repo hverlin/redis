@@ -186,4 +186,13 @@ describe('commands test', function () {
     assert.ok(+(ttl as string) <= 60);
     assert.equal(value, 'bar');
   });
+
+  it('BITCOUNT command', async () => {
+    const key = genKey();
+    await client.SET(key, 'foobar');
+
+    assert.equal(await client.BITCOUNT(key), 26);
+    assert.equal(await client.BITCOUNT(key, 0, 0), 4);
+    assert.equal(await client.BITCOUNT(key, 1, 1), 6);
+  });
 });

@@ -22,7 +22,8 @@ export interface IBaseCommand {
 
   BGSAVE(schedule?: unknown): Promise<void>;
 
-  BITCOUNT(key: string, start?: number, end?: number): Promise<number>;
+  BITCOUNT(key: string): Promise<number>;
+  BITCOUNT(key: string, start: number, end: number): Promise<number>;
 
   BITFIELD(key: string, subcommand: 'get', type: string, offset: number): Promise<number[]>;
   BITFIELD(
