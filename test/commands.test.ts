@@ -138,6 +138,13 @@ describe('commands test', function () {
     expect(client.DECR(key)).rejects.toThrow('ERR value is not an integer or out of range');
   });
 
+  it('STRLEN command', async () => {
+    const key = genKey();
+    await client.SET(key, 'hello');
+    assert.equal(await client.STRLEN(key), 5);
+    assert.equal(await client.STRLEN(genKey()), 0);
+  });
+
   // https://redis.io/commands/multi
   // https://redis.io/commands/exec
   it('Should execute a multi command', async () => {
