@@ -134,8 +134,8 @@ describe('commands test', function () {
     assert.equal(await client.DECRBY(key, 2), 13);
 
     await client.SET(key, 'test');
-    expect(client.INCR(key)).rejects.toThrow('ERR value is not an integer or out of range');
-    expect(client.DECR(key)).rejects.toThrow('ERR value is not an integer or out of range');
+    await expect(client.INCR(key)).rejects.toThrow('ERR value is not an integer or out of range');
+    await expect(client.DECR(key)).rejects.toThrow('ERR value is not an integer or out of range');
   });
 
   it('STRLEN command', async () => {
@@ -143,6 +143,17 @@ describe('commands test', function () {
     await client.SET(key, 'hello');
     assert.equal(await client.STRLEN(key), 5);
     assert.equal(await client.STRLEN(genKey()), 0);
+  });
+
+  it('INCRBYFLOAT command', async () => {
+    const key = genKey();
+
+    await client.SET(key, 'test');
+    await expect(client.INCRBYFLOAT(key, 0.2)).rejects.toThrow('ERR value is not a valid float');
+
+    await client.SET(key, '10');
+    assert.equal(+(await client.INCRBYFLOAT(key, 0.1)), 10.1);
+    assert.equal(+(await client.INCRBYFLOAT(key, -5)), 5.1);
   });
 
   // https://redis.io/commands/multi

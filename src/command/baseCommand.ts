@@ -272,7 +272,7 @@ export interface IBaseCommand {
 
   INCRBY(key: string, increment: number): Promise<number>;
 
-  INCRBYFLOAT(key: string, field: string, increment: string): Promise<number>;
+  INCRBYFLOAT(key: string, increment: number): Promise<number>;
 
   INFO(
     section?:
