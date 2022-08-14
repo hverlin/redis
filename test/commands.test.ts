@@ -99,6 +99,21 @@ describe('commands test', function () {
     }
   });
 
+  it('MSET/MGET/MSETNX commands', async () => {
+    const key1 = genKey();
+    const key2 = genKey();
+    assert.equal(await client.MSET(key1, 'Hello', key2, 'world'), 'OK');
+    assert.deepEqual(await client.MGET(key1, key2), ['Hello', 'world']);
+    assert.deepEqual(await client.MGET(genKey(), key2), [null, 'world']);
+
+    assert.equal(await client.MSETNX(key1, 'Hello', key2, 'world'), 0);
+
+    const key3 = genKey();
+    const key4 = genKey();
+    assert.equal(await client.MSETNX(key3, 'tx', key4, 'test'), 1);
+    assert.deepEqual(await client.MGET(key3, key4, genKey()), ['tx', 'test', null]);
+  });
+
   // https://redis.io/commands/hget
   // https://redis.io/commands/hset
   // https://redis.io/commands/hexists

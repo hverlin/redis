@@ -356,7 +356,7 @@ export interface IBaseCommand {
 
   MOVE(key: string, db: number): Promise<void>;
 
-  MSET(key: string, value: string, ...arg: string[]): Promise<void>;
+  MSET(key: string, value: string, ...arg: string[]): Promise<string>;
 
   MSETNX(key: string, value: string, ...arg: string[]): Promise<number>;
 
