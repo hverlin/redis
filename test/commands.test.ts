@@ -171,22 +171,6 @@ describe('commands test', function () {
     assert.equal(+(await client.INCRBYFLOAT(key, -5)), 5.1);
   });
 
-  // https://redis.io/commands/multi
-  // https://redis.io/commands/exec
-  it('Should execute a multi command', async () => {
-    const key = genKey('foo2');
-    assert.equal(await client.SET(key, 'bar', 'EX', '60'), 'OK');
-
-    await client.MULTI();
-    await client.TTL(key);
-    await client.GET(key);
-    const [ttl, value] = await client.EXEC();
-
-    assert.ok(ttl);
-    assert.ok(+(ttl as string) <= 60);
-    assert.equal(value, 'bar');
-  });
-
   it('BITCOUNT command', async () => {
     const key = genKey();
     await client.SET(key, 'foobar');
@@ -194,5 +178,61 @@ describe('commands test', function () {
     assert.equal(await client.BITCOUNT(key), 26);
     assert.equal(await client.BITCOUNT(key, 0, 0), 4);
     assert.equal(await client.BITCOUNT(key, 1, 1), 6);
+  });
+
+  describe('transactions', () => {
+    // https://redis.io/commands/multi
+    // https://redis.io/commands/exec
+    it('Should execute a multi command', async () => {
+      const key = genKey('foo2');
+      assert.equal(await client.SET(key, 'bar', 'EX', '60'), 'OK');
+
+      await client.MULTI();
+      await client.TTL(key);
+      await client.GET(key);
+      const [ttl, value] = await client.EXEC();
+
+      assert.ok(ttl);
+      assert.ok(+(ttl as string) <= 60);
+      assert.equal(value, 'bar');
+    });
+
+    it('DISCARD', async () => {
+      const key1 = genKey();
+      const key2 = genKey();
+
+      assert.equal(await client.MULTI(), 'OK');
+      await client.SET(key1, 'foo');
+      await client.SET(key2, 'bar');
+      assert.equal(await client.DISCARD(), 'OK');
+
+      assert.equal(await client.EXISTS(key1, key2), 0);
+    });
+
+    it('WATCH', async () => {
+      const key = genKey();
+      await client.SET(key, '1');
+
+      assert.equal(await client.WATCH(key), 'OK');
+      const val = await client.GET(key);
+      const updatedVal = +val + 1;
+      await client.MULTI();
+      await client.SET(key, `${updatedVal}`);
+      const client2 = new ClientV3();
+      await client2.SET(key, '99');
+      assert.equal(await client.EXEC(), null);
+      assert.equal(await client.GET(key), '99');
+
+      {
+        const val = await client.GET(key);
+        const updatedVal = +val + 1;
+        await client.MULTI();
+        await client.SET(key, `${updatedVal}`);
+        const client2 = new ClientV3();
+        await client2.SET(key, `99`);
+        assert.deepEqual(await client.EXEC(), ['OK']);
+        assert.equal(await client.GET(key), '100');
+      }
+    });
   });
 });

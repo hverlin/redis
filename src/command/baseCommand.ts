@@ -153,7 +153,7 @@ export interface IBaseCommand {
 
   DEL(...key: string[]): Promise<number>;
 
-  DISCARD(): Promise<void>;
+  DISCARD(): Promise<'OK'>;
 
   DUMP(key: string): Promise<string>;
 
@@ -361,7 +361,7 @@ export interface IBaseCommand {
 
   MSETNX(key: string, value: string, ...arg: string[]): Promise<number>;
 
-  MULTI(): Promise<void>;
+  MULTI(): Promise<'OK'>;
 
   OBJECT(subcommand: 'refcount', key: string): Promise<number>;
   OBJECT(subcommand: 'encoding', key: string): Promise<string>;
@@ -479,7 +479,7 @@ export interface IBaseCommand {
 
   SELECT(index: number): Promise<void>;
 
-  SET(key: string, value: string, ...arg: string[]): Promise<string>;
+  SET(key: string, value: string, ...arg: string[]): Promise<'OK'>;
 
   SETBIT(key: string, offset: number, value: string): Promise<number>;
 
@@ -564,7 +564,7 @@ export interface IBaseCommand {
 
   WAIT(numreplicas: string, timeout: number): Promise<void>;
 
-  WATCH(...key: string[]): Promise<void>;
+  WATCH(...key: string[]): Promise<'OK'>;
 
   XADD(key: string, ...arg: string[]): Promise<string>;
 
